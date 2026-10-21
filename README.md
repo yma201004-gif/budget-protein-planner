@@ -8,7 +8,7 @@ Alternatively download the repository ZIP, extract it, and open index.html. Keep
 ## Data and limitations
 - 25 generic foods from FSANZ Australian Food Composition Database Release 3.
 - Food Details and Nutrient Profiles joined by Public Food Key; nutrients are per 100 g.
-- Six selected WhichGrocer catalogue offers cover chicken breast, rolled oats and firm tofu at Woolworths and Coles.
+- 19 selected WhichGrocer catalogue offers cover ten ingredients. Nine have both retailers; turkey breast has Woolworths only.
 - Snapshot labelled 20 October 2026; provider timestamps retained in prices.js.
 - Catalogue AUD prices are not particular store shelf prices. No automatic refresh.
 - Generic nutrient proxies are not branded-product labels. Different brands and packs are not exact equivalents.
@@ -25,7 +25,7 @@ data.js: AFCD nutrient records and historical source information.
 prices.js: current selected-price overlay.
 model.js: calculation functions.
 test.cjs: regression tests (run node test.cjs).
-whichgrocer-snapshot.json: retained query responses.
+whichgrocer-snapshot.json and whichgrocer-expansion.json: retained query responses.
 data-audit.json: historical AFCD import audit, before the new price overlay.
 WHICHGROCER-NOTES.md: snapshot mapping notes.
 

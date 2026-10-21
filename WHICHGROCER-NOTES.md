@@ -13,3 +13,5 @@ Variable-weight chicken and medium-firm tofu were not selected. Selected product
 No scheduled refresh, store-specific pricing or browser credential storage is implemented.
 Full-pack totals use the products selected for lowest portion unit price, not basket-cost optimization.
 Regression checks: node test.cjs
+
+Expansion: 24 additional search credits; 169 credits remained. Nineteen offers across ten ingredients are now enabled. Variable-weight, per-kg/pack conflicts, cooked/drained yields and volume-to-mass conversions remain withheld. This is not a complete catalogue search. Product matching is generic, not an exact nutrient-label match.
