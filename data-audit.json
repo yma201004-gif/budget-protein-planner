@@ -1,0 +1,265 @@
+{
+  "metadata": {
+    "nutritionRecords": 1588,
+    "selectedFoods": 25,
+    "historicalPriceCount": 7,
+    "apiConnected": false,
+    "nutritionBasis": "per 100 g",
+    "sourceHashes": {
+      "AFCD Release 3 - Nutrient profiles.xlsx": "14cb3e73dbf58987b440e6299624c0fefd7a4e61591fc1f753995d9534e0efc9",
+      "AFCD Release 3 - Food Details.xlsx": "69aa096c45cb0699db60a9c544442312e9ff09af587b99c42dc78bc26f689629"
+    }
+  },
+  "checks": [
+    {
+      "id": "F000386",
+      "proteinBefore": 19.2,
+      "proteinAfter": 19.2,
+      "kcalBefore": 125,
+      "kcalAfter": 125.0,
+      "nutrientRow": 1166,
+      "detailsRow": 1166,
+      "historicalPriceEnabled": false
+    },
+    {
+      "id": "F000448",
+      "proteinBefore": 6.6,
+      "proteinAfter": 6.6,
+      "kcalBefore": 105.4,
+      "kcalAfter": 105.40152963671127,
+      "nutrientRow": 751,
+      "detailsRow": 751,
+      "historicalPriceEnabled": false
+    },
+    {
+      "id": "F000666",
+      "proteinBefore": 22.9,
+      "proteinAfter": 22.9,
+      "kcalBefore": 129.3,
+      "kcalAfter": 129.302103250478,
+      "nutrientRow": 792,
+      "detailsRow": 792,
+      "historicalPriceEnabled": true
+    },
+    {
+      "id": "F000739",
+      "proteinBefore": 20.4,
+      "proteinAfter": 20.4,
+      "kcalBefore": 107.6,
+      "kcalAfter": 107.55258126195028,
+      "nutrientRow": 798,
+      "detailsRow": 798,
+      "historicalPriceEnabled": true
+    },
+    {
+      "id": "F002413",
+      "proteinBefore": 27.9,
+      "proteinAfter": 27.9,
+      "kcalBefore": 324.1,
+      "kcalAfter": 324.09177820267684,
+      "nutrientRow": 448,
+      "detailsRow": 448,
+      "historicalPriceEnabled": false
+    },
+    {
+      "id": "F002435",
+      "proteinBefore": 17,
+      "proteinAfter": 17,
+      "kcalBefore": 132.9,
+      "kcalAfter": 132.887189292543,
+      "nutrientRow": 451,
+      "detailsRow": 451,
+      "historicalPriceEnabled": false
+    },
+    {
+      "id": "F002594",
+      "proteinBefore": 22.5,
+      "proteinAfter": 22.5,
+      "kcalBefore": 98.5,
+      "kcalAfter": 98.47036328871893,
+      "nutrientRow": 1024,
+      "detailsRow": 1024,
+      "historicalPriceEnabled": true
+    },
+    {
+      "id": "F002806",
+      "proteinBefore": 19.1,
+      "proteinAfter": 19.1,
+      "kcalBefore": 104.2,
+      "kcalAfter": 104.20650095602294,
+      "nutrientRow": 1039,
+      "detailsRow": 1039,
+      "historicalPriceEnabled": false
+    },
+    {
+      "id": "F002880",
+      "proteinBefore": 6.3,
+      "proteinAfter": 6.3,
+      "kcalBefore": 113.3,
+      "kcalAfter": 113.2887189292543,
+      "nutrientRow": 756,
+      "detailsRow": 756,
+      "historicalPriceEnabled": false
+    },
+    {
+      "id": "F003705",
+      "proteinBefore": 11.6,
+      "proteinAfter": 11.6,
+      "kcalBefore": 48.8,
+      "kcalAfter": 48.75717017208413,
+      "nutrientRow": 590,
+      "detailsRow": 590,
+      "historicalPriceEnabled": false
+    },
+    {
+      "id": "F003721",
+      "proteinBefore": 12.4,
+      "proteinAfter": 12.4,
+      "kcalBefore": 136,
+      "kcalAfter": 135.9942638623327,
+      "nutrientRow": 583,
+      "detailsRow": 583,
+      "historicalPriceEnabled": false
+    },
+    {
+      "id": "F005177",
+      "proteinBefore": 7.3,
+      "proteinAfter": 7.3,
+      "kcalBefore": 92,
+      "kcalAfter": 92.01720841300191,
+      "nutrientRow": 762,
+      "detailsRow": 762,
+      "historicalPriceEnabled": false
+    },
+    {
+      "id": "F005614",
+      "proteinBefore": 3.5,
+      "proteinAfter": 3.3,
+      "kcalBefore": 44.9,
+      "kcalAfter": 43.26003824091778,
+      "nutrientRow": 476,
+      "detailsRow": 476,
+      "historicalPriceEnabled": false
+    },
+    {
+      "id": "F005637",
+      "proteinBefore": 3.7,
+      "proteinAfter": 3.6,
+      "kcalBefore": 36.3,
+      "kcalAfter": 34.894837476099426,
+      "nutrientRow": 478,
+      "detailsRow": 478,
+      "historicalPriceEnabled": false
+    },
+    {
+      "id": "F006143",
+      "proteinBefore": 12.2,
+      "proteinAfter": 12.2,
+      "kcalBefore": 373.8,
+      "kcalAfter": 373.8049713193117,
+      "nutrientRow": 292,
+      "detailsRow": 292,
+      "historicalPriceEnabled": true
+    },
+    {
+      "id": "F006579",
+      "proteinBefore": 24.3,
+      "proteinAfter": 24.3,
+      "kcalBefore": 628.1,
+      "kcalAfter": 628.1070745697897,
+      "nutrientRow": 440,
+      "detailsRow": 440,
+      "historicalPriceEnabled": true
+    },
+    {
+      "id": "F006899",
+      "proteinBefore": 23.1,
+      "proteinAfter": 23.1,
+      "kcalBefore": 103.5,
+      "kcalAfter": 103.48948374760994,
+      "nutrientRow": 990,
+      "detailsRow": 990,
+      "historicalPriceEnabled": false
+    },
+    {
+      "id": "F007432",
+      "proteinBefore": 27.1,
+      "proteinAfter": 27.1,
+      "kcalBefore": 121.2,
+      "kcalAfter": 121.17590822179731,
+      "nutrientRow": 1265,
+      "detailsRow": 1265,
+      "historicalPriceEnabled": false
+    },
+    {
+      "id": "F007827",
+      "proteinBefore": 20.5,
+      "proteinAfter": 20.5,
+      "kcalBefore": 230.6,
+      "kcalAfter": 230.64053537284894,
+      "nutrientRow": 1202,
+      "detailsRow": 1202,
+      "historicalPriceEnabled": true
+    },
+    {
+      "id": "F007853",
+      "proteinBefore": 20.7,
+      "proteinAfter": 20.7,
+      "kcalBefore": 138.4,
+      "kcalAfter": 138.38432122370935,
+      "nutrientRow": 1273,
+      "detailsRow": 1273,
+      "historicalPriceEnabled": false
+    },
+    {
+      "id": "F008720",
+      "proteinBefore": 4.5,
+      "proteinAfter": 4.4,
+      "kcalBefore": 63.3,
+      "kcalAfter": 61.4244741873805,
+      "nutrientRow": 522,
+      "detailsRow": 522,
+      "historicalPriceEnabled": false
+    },
+    {
+      "id": "F009176",
+      "proteinBefore": 12.8,
+      "proteinAfter": 12.8,
+      "kcalBefore": 129.8,
+      "kcalAfter": 129.78011472275335,
+      "nutrientRow": 525,
+      "detailsRow": 525,
+      "historicalPriceEnabled": true
+    },
+    {
+      "id": "F009300",
+      "proteinBefore": 26.1,
+      "proteinAfter": 26.1,
+      "kcalBefore": 129.1,
+      "kcalAfter": 129.06309751434034,
+      "nutrientRow": 1277,
+      "detailsRow": 1277,
+      "historicalPriceEnabled": false
+    },
+    {
+      "id": "F009307",
+      "proteinBefore": 21.6,
+      "proteinAfter": 21.6,
+      "kcalBefore": 117.1,
+      "kcalAfter": 117.11281070745697,
+      "nutrientRow": 1057,
+      "detailsRow": 1057,
+      "historicalPriceEnabled": false
+    },
+    {
+      "id": "F009694",
+      "proteinBefore": 5.3,
+      "proteinAfter": 5.1,
+      "kcalBefore": 76,
+      "kcalAfter": 73.1357552581262,
+      "nutrientRow": 494,
+      "detailsRow": 494,
+      "historicalPriceEnabled": false
+    }
+  ]
+}

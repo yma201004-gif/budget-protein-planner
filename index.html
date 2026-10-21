@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Budget Protein Planner · Meal studio</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><div class="brand">BP<span>Budget Protein Planner</span></div><span class="version">STUDENT MEAL STUDIO / V2</span></header>
+<main>
+<section class="intro"><div><div class="eyebrow">LESS SPEND. MORE POSSIBILITY.</div><h1>A better meal starts here.</h1><p>Compare everyday ingredients. Find your protein target, within your budget.</p></div><div class="step">01 Compare &nbsp; → &nbsp; 02 Combine &nbsp; → &nbsp; 03 Adjust</div></section>
+<aside class="notice"><strong>WhichGrocer price snapshot connected · 20 October 2026.</strong> Three ingredients have selected product prices at both retailers. Prices are catalogue AUD, not a particular store shelf price. Other prices are withheld. Nutrition remains a generic AFCD estimate. No automatic refresh is enabled.</aside>
+<section class="targets">
+<label>Meal protein target <span>g / meal</span><input id="proteinTarget" type="number" min="1" max="500" value="40"></label>
+<label>Meal portion budget <span>AUD / meal</span><input id="budgetTarget" type="number" min="0.01" max="1000" step=".5" value="5"></label>
+<label>Retailer preference <span>Price reference</span><select id="retailer"><option value="Both">Both — lowest portion price</option><option>Woolworths</option><option>Coles</option></select></label>
+</section>
+<div class="workspace">
+<section class="panel catalogue"><div class="section-head"><div><div class="eyebrow">01 / EXPLORE</div><h2>Everyday ingredients</h2></div><span id="count" class="pill"></span></div>
+<div class="filters"><input id="search" aria-label="Search foods" placeholder="Search chicken, tofu, oats…"><select id="category" aria-label="Food category"><option value="">All categories</option></select><select id="sort" aria-label="Sort foods"><option value="name">Name A–Z</option><option value="value">Protein / $: highest</option></select></div>
+<div class="table-wrap"><table><thead><tr><th>Food / reference state</th><th>Woolworths<br>$/100 g</th><th>Coles<br>$/100 g</th><th>Protein/$<br>g/AUD</th><th>Cost/25 g<br>protein</th><th></th></tr></thead><tbody id="foods"></tbody></table></div>
+<p class="footnote">All inputs use grams, including liquids. Do not enter mL as grams. Raw, cooked and drained foods are distinct records. A dash means unavailable, not zero.</p></section>
+<section class="panel meal"><div class="section-head"><div><div class="eyebrow">02 / COMBINE</div><h2>Your meal</h2></div><button id="clear" class="quiet">Clear</button></div><div id="meal"></div>
+<div class="summary" aria-live="polite"><div><span>Protein</span><strong id="totalProtein"></strong></div><div><span>Energy</span><strong id="totalEnergy"></strong></div><div><span>Portion cost</span><strong id="totalCost"></strong></div></div>
+<div class="purchase"><div><span>Full-pack purchase</span><strong id="packCost"></strong></div><p>Assumes an empty pantry. Leftovers remain available for later meals. The meal budget applies to portion cost, not this shopping total.</p><div id="packList"></div></div>
+</section></div>
+<section class="progress-grid"><div class="panel"><div class="section-head"><h3>Protein target</h3><strong id="proteinProgress"></strong></div><progress id="proteinBar" max="100"></progress><p id="proteinStatus"></p></div><div class="panel"><div class="section-head"><h3>Portion budget</h3><strong id="budgetProgress"></strong></div><progress id="budgetBar" max="100"></progress><p id="budgetStatus"></p></div></section>
+<section class="charts"><div class="panel"><div class="eyebrow">03 / UNDERSTAND</div><h2>Where your protein comes from</h2><p class="sub">Contribution by selected ingredient · grams</p><div id="proteinChart"></div></div><div class="panel"><div class="section-head"><h2>Retail price comparison</h2><span class="pill">WHICHGROCER SNAPSHOT</span></div><p class="sub">Selected products · AUD per 100 g · different brands and packs, not identical products</p><div class="legend"><span class="w">● Woolworths</span><span class="c">● Coles</span></div><div id="priceChart"></div></div></section>
+<section class="panel" style="margin-top:18px"><h2>Data provenance and limitations</h2><p class="sub">Original Food Details and Nutrient Profiles are joined by Public Food Key. All nutrient values use the per-100-g worksheet, including liquids. Values describe generic foods, not exact retailer products. Only the three newly mapped ingredients use the WhichGrocer snapshot; older project prices are excluded.</p><div id="sources"></div><p class="sub">Product data by WhichGrocer. Snapshot loaded through an authenticated MCP query, not an automatic website connection. Lowest portion price compares selected products only; it does not minimize the full-pack shopping total.</p></section>
+<footer><span>Nutrition: original AFCD Release 3 workbooks. Generic nutrient proxies; no branded-product match claim.</span><span>Planning support, not medical advice. Catalogue prices require checking before shopping.</span></footer>
+</main><script src="data.js"></script><script src="prices.js"></script><script src="model.js"></script><script src="app.js"></script>
+</body></html>

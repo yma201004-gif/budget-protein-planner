@@ -1,0 +1,36 @@
+const $=id=>document.getElementById(id), money=v=>v===null?"Unavailable":"$"+v.toFixed(2);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const meal={};let target=40,budget=5;
+const short=f=>f.name.split(",").slice(0,2).join(",");
+for(const c of [...new Set(FOODS.map(f=>f.category))].sort())$("category").add(new Option(c,c));
+function render(){
+ const retailer=$("retailer").value;
+ let list=FOODS.filter(f=>f.name.toLowerCase().includes($("search").value.toLowerCase())&&(!$("category").value||f.category===$("category").value));
+ list.sort((a,b)=>$("sort").value==="name"?a.name.localeCompare(b.name):(value(b)-value(a)||a.name.localeCompare(b.name)));
+ function value(f){const o=Planner.offer(f,retailer);return o?f.protein/o.unitPrice:-1}
+ $("count").textContent=`${list.length} / ${FOODS.length} foods`;
+ $("foods").innerHTML=list.map(f=>{const o=Planner.offer(f,retailer);return `<tr><td>${esc(f.name)}<small>${f.protein.toFixed(1)} g protein / 100 g · <a href="${esc(f.source)}" target="_blank" rel="noopener">AFCD reference</a></small></td><td>${money(Planner.offer(f,"Woolworths")?.unitPrice??null)}</td><td>${money(Planner.offer(f,"Coles")?.unitPrice??null)}</td><td>${o?(f.protein/o.unitPrice).toFixed(1):"—"}</td><td>${o&&f.protein>0?money(25*o.unitPrice/f.protein):"—"}</td><td><button class="add" data-add="${f.id}" aria-label="Add ${esc(f.name)}">+</button></td></tr>`}).join("")||'<tr><td colspan="6">No matching foods. Try another search.</td></tr>';
+ const result=Planner.calculate(FOODS,meal,retailer);
+ $("meal").innerHTML=result.lines.map(l=>`<div class="meal-row"><div><strong>${esc(short(l.food))}</strong><small>${l.selected?l.selected.retailer+" · catalogue "+esc(l.selected.updated_at?.slice(0,10)||"unknown date"):"Price unavailable"} · grams</small></div><input aria-label="${esc(l.food.name)} serving in grams" type="number" min="1" max="10000" step="1" value="${l.g}" data-grams="${l.food.id}"><button data-remove="${l.food.id}" aria-label="Remove ${esc(l.food.name)}">×</button></div>`).join("")||'<div class="empty">Add an ingredient to start your meal.</div>';
+ $("totalProtein").textContent=result.protein.toFixed(1)+" g";$("totalEnergy").textContent=Math.round(result.kcal)+" kcal";$("totalCost").textContent=money(result.cost);$("packCost").textContent=money(result.purchase);
+ $("packList").innerHTML=result.lines.map(l=>`<div class="pack-line">${esc(short(l.food))}: ${l.selected?`${l.packs} × ${l.selected.pack} g (${l.selected.retailer}) · ${money(l.packs*l.selected.price)} · ${(l.packs*l.selected.pack-l.g).toFixed(0)} g left`:"no priced pack available"}</div>`).join("");
+ const pp=result.protein/target*100;
+ $("proteinProgress").textContent=`${result.protein.toFixed(1)} / ${target} g`;$("proteinBar").value=Math.min(100,pp);
+ $("proteinStatus").textContent=result.protein>=target?"Meal protein target reached. More is not automatically better.":`${(target-result.protein).toFixed(1)} g remaining for this meal.`;
+ $("budgetProgress").textContent=`${money(result.cost)} / ${money(budget)}`;
+ $("budgetBar").value=result.cost===null?0:Math.min(100,result.cost/budget*100);$("budgetBar").classList.toggle("over",result.cost>budget);
+ $("budgetStatus").textContent=result.missing?`Budget status unknown: some prices are missing. Known portion subtotal: ${money(result.knownCost)}.`:result.cost>budget?`${money(result.cost-budget)} over the meal budget.`:`${money(budget-result.cost)} remaining for this meal.`;
+ const max=Math.max(1,...result.lines.map(l=>l.protein));
+ $("proteinChart").innerHTML=result.lines.map(l=>`<div class="chart-row"><div class="chart-label"><span>${esc(short(l.food))}</span><strong>${l.protein.toFixed(1)} g</strong></div><div class="track"><div class="bar" style="width:${l.protein/max*100}%"></div></div></div>`).join("")||'<p class="empty">Your ingredient contributions will appear here.</p>';
+ const priced=FOODS.filter(f=>Planner.offer(f,retailer));const priceMax=Math.max(1,...priced.flatMap(f=>["Woolworths","Coles"].filter(r=>retailer==="Both"||r===retailer).map(r=>Planner.offer(f,r)?.unitPrice||0)));
+ $("priceChart").innerHTML=priced.map(f=>`<div class="chart-row"><div class="chart-label">${esc(short(f))}</div>${["Woolworths","Coles"].filter(r=>retailer==="Both"||r===retailer).map(r=>{const o=Planner.offer(f,r);return `<div class="price-pair"><div class="track"><div class="bar ${r==="Coles"?"coles":""}" style="width:${o?o.unitPrice/priceMax*100:0}%"></div></div><span>${o?money(o.unitPrice):"N/A"}</span></div>`}).join("")}</div>`).join("")||'<p class="empty">No usable price records for this retailer.</p>';
+ $("sources").innerHTML=`<details><summary>Inspect all ${FOODS.length} source mappings</summary>${FOODS.map(f=>`<p class="sub"><strong>${esc(f.name)}</strong><br>AFCD ${esc(f.id)} · Nutrient Profiles row ${f.nutritionRow} · Food Details row ${f.detailsRow}<br>${esc(f.quality)}<br>${Object.entries(f.offers).map(([r,o])=>`${esc(r)}: <a href="${esc(o.url)}" target="_blank" rel="noopener">${esc(o.name)}</a> · ${o.pack} g · ${money(o.price)} · updated ${esc(o.updated_at)} · WhichGrocer catalogue price`).join("<br>")||"No current verified mapping; price unavailable."}</p>`).join("")}</details>`;
+}
+$("foods").addEventListener("click",e=>{const id=e.target.closest("[data-add]")?.dataset.add;if(id){meal[id]=(meal[id]||0)+100;render()}});
+$("meal").addEventListener("click",e=>{const id=e.target.closest("[data-remove]")?.dataset.remove;if(id){delete meal[id];render()}});
+$("meal").addEventListener("change",e=>{const id=e.target.dataset.grams;if(id){if(!e.target.checkValidity()||!Number.isFinite(+e.target.value)||+e.target.value<=0){e.target.reportValidity();e.target.value=meal[id];return}meal[id]=+e.target.value;render()}});
+for(const id of ["search","category","sort","retailer"])$(id).addEventListener("input",render);
+for(const id of ["proteinTarget","budgetTarget"])$(id).addEventListener("change",e=>{if(!e.target.checkValidity()||+e.target.value<=0){e.target.value=id==="proteinTarget"?target:budget;return}if(id==="proteinTarget")target=+e.target.value;else budget=+e.target.value;render()});
+$("clear").onclick=()=>{Object.keys(meal).forEach(k=>delete meal[k]);render()};
+for(const [id,g] of [["F002594",200],["F006143",80]])if(FOODS.some(f=>f.id===id))meal[id]=g;
+render();
