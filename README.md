@@ -6,25 +6,30 @@ Visit https://yma201004-gif.github.io/budget-protein-planner/ after GitHub Pages
 Alternatively download the repository ZIP, extract it, and open index.html. Keep all JavaScript and CSS files together.
 
 ## Data and limitations
-- 25 generic foods from FSANZ Australian Food Composition Database Release 3.
-- Food Details and Nutrient Profiles joined by Public Food Key; nutrients are per 100 g.
-- 19 selected WhichGrocer catalogue offers cover ten ingredients. Nine have both retailers; turkey breast has Woolworths only.
+- 25 food options after removing egg white, replacing food states, and adding branded oil-blend tuna.
+- AFCD Food Details and Nutrient Profiles joined by Public Food Key. Milk uses per-100-mL data. Other generic nutrients use per-100-g data; eggs are scaled to an assumed 50 g cooked edible portion per egg.
+- 33 selected WhichGrocer offers cover 19 food options. Six foods remain without verified prices.
 - Snapshot labelled 20 October 2026; provider timestamps retained in prices.js.
 - Catalogue AUD prices are not particular store shelf prices. No automatic refresh.
-- Generic nutrient proxies are not branded-product labels. Different brands and packs are not exact equivalents.
+- Generic nutrient proxies are not branded-product labels. Vitasoy Calci-Plus uses manufacturer nutrition; Coles oil-blend tuna uses user-supplied packaging values per can's solid portion (15.7 g protein, 127 kcal). Photos themselves are not published.
 - Older prices remain in the underlying historical data for audit, but prices.js excludes them from the application.
 - Other foods show unavailable prices, not zero.
 - Both-retailer mode chooses the lower unit price among selected products, not the cheapest product across the whole market.
-- Pack purchase totals use each retailer's actual pack weight and assume an empty pantry; this is not basket-cost optimization.
-- Portions are entered in grams, including liquids. Do not substitute mL without a density conversion.
+- Pack totals assume an empty pantry. Pork uses an estimated 400 g pack and is labelled estimated. Salmon uses $4.80/100 g but has no verified pack total; including it makes the purchase total unavailable, not the portion cost.
+- Solids use grams, liquids mL, whole eggs egg count, branded tuna can count. Fractional cans/eggs are supported; purchases round up to whole packs.
+- Lentils use dry red lentil nutrition and dry weight before cooking. Prawns use raw flesh nutrition. Cheddar uses regular-fat nutrition. No guessed drained-weight conversions.
+- Price chart compares AUD per 25 g protein so different input units are not mixed on one scale.
 - Meal state is not saved after reload. Planning support, not medical advice.
 
 ## Files
 index.html, style.css, app.js: interface.
 data.js: AFCD nutrient records and historical source information.
 prices.js: current selected-price overlay.
+reviewed-data.js: approved food-state changes, units, labelled estimates and additional price records; loaded after prices.js.
 model.js: calculation functions.
 test.cjs: regression tests (run node test.cjs).
+review-test.cjs: reviewed-data and multi-unit regression tests (run node review-test.cjs).
+verified-products.json: additional queried product records and AFCD extraction evidence.
 whichgrocer-snapshot.json and whichgrocer-expansion.json: retained query responses.
 data-audit.json: historical AFCD import audit, before the new price overlay.
 WHICHGROCER-NOTES.md: snapshot mapping notes.

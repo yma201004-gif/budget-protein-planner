@@ -1,5 +1,17 @@
 # WhichGrocer snapshot integration
 
+## Current reviewed version
+33 selected offers across 19 of 25 food options. See reviewed-data.js and verified-products.json.
+Egg white removed. Whole eggs use a clearly labelled 50 g edible cooked-weight assumption per egg.
+Coles tuna 8675339 is a separate branded item, priced per can; 95 g net weight is not treated as drained weight.
+Regular cheddar, dry red lentils and raw peeled prawns replace incompatible nutrition states.
+Skim milk uses AFCD per-100-mL data. Vitasoy Calci-Plus uses its manufacturer values at https://soy.com.au/product/soy-milk-calci-plus/ (3.2 g protein and 64 kcal per 100 mL).
+Pork 2359370 uses $18.50/kg and an estimated 400 g pack; salmon 126497 uses $48/kg only, with pack price explicitly null.
+Chickpeas, kidney beans, pink canned salmon and water-packed tuna await drained weights. Barramundi awaits a suitable unseasoned fillet; approximately 1%-fat milk awaits a matching product. No fabricated prices or yields.
+Tests: node review-test.cjs. No unattended refresh.
+
+## Earlier snapshot history (superseded coverage counts)
+
 Snapshot label: 20 October 2026. Provider timestamps are retained verbatim.
 Source: authenticated WhichGrocer MCP search_basket responses, retained in whichgrocer-snapshot.json.
 Three ingredients, six selected products. Searches consumed 6 credits; 193 remained.
