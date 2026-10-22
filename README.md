@@ -22,6 +22,14 @@ Alternatively download the repository ZIP, extract it, and open index.html. Keep
 - Price chart compares AUD per 25 g protein so different input units are not mixed on one scale.
 - Meal state is not saved after reload. Planning support, not medical advice.
 
+## Interaction and visual hierarchy
+
+- Search and category filters update the ingredient table, the visible insight summary, and the price chart together.
+- The lower retailer price is emphasised in each row; ingredients already added to the meal receive a persistent `IN MEAL` marker and row highlight.
+- The meal panel compares Woolworths-only, Coles-only and split-basket portion costs, then states whether the split-store saving justifies visiting both shops.
+- The price chart opens with the 10 cheapest visible foods and can be switched to all visible foods, keeping the comparison readable without hiding the full data.
+- Retailer colour is consistent across the legend, bars, price cues and active cost card; bar length encodes cost per 25 g protein rather than relying on colour alone.
+
 ## Files
 index.html, style.css, app.js: interface.
 data.js: AFCD nutrient records and historical source information.
