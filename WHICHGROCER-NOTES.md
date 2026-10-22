@@ -1,15 +1,15 @@
 # WhichGrocer snapshot integration
 
 ## Current reviewed version
-38 selected offers across all 24 food options in Both mode. Some retailer-specific offers remain unavailable. See reviewed-data.js, verified-products.json and staples-price-snapshot.json.
-Water-packed tuna removed; the supplied Coles oil-blend tuna remains. Chickpeas, kidney beans and pink canned salmon replaced with SunRice dry long-grain rice (Coles 296960, 2 kg, $4.50), Coles frozen broccoli (5341010, 500 g, $4.00), and Helga's Traditional Wholemeal Bread (5969435, 750 g, $5.20). Each new item uses its exact Coles product nutrition page, linked in the dashboard; these are not AFCD records. All three price timestamps are 2026-10-20. Enter dry rice, pre-cooking frozen broccoli, and bread as-sold weights in grams. These replacements add meal variety, not equivalent protein substitutions.
-Additional reviewed records: Coles 1909952 Devondale Light Milk 3 L, $6.40; Woolworths 6050189 Humpty Doo skin-off barramundi 300 g, $17. Both WhichGrocer timestamps are 2026-10-20. Milk uses the exact Coles 3 L product nutrition (188 kJ, 3.6 g protein, 1.3 g fat per 100 mL). Barramundi retains generic AFCD raw nutrition and explicitly assumes the whole pack is edible; bone removal is NOT verified. This is not an exact branded nutrition match.
+48 selected offers across all 24 food options, with an available in-stock offer at both Coles and Woolworths for every food. See reviewed-data.js, verified-products.json and staples-price-snapshot.json.
+Price completion: red lentils use the identical Katoomba 1 kg product at both stores; lite milk uses paired 1 L own-brand bottles; pork uses paired own-brand fillet at $18.50/kg and variable weight; salmon uses paired 4-pack 460 g skin-off portions; tuna uses paired 95 g own-brand cans. Each retailer-specific milk, salmon and tuna offer carries its own product-label nutrition. Barramundi and turkey breast were replaced by paired raw 500 g own-brand beef stir-fry strips and paired raw 270 g own-brand lamb leg steaks, respectively, after no stable same-format own-brand pairs were found. Replacement rows use AFCD F000931 and F005013 rather than retaining the old food descriptions.
+Water-packed tuna remains removed. Chickpeas, kidney beans and pink canned salmon remain replaced by SunRice dry long-grain rice, frozen broccoli and Helga's wholemeal bread. Enter dry rice, pre-cooking frozen broccoli, and bread as-sold weights in grams. These additions provide meal variety rather than equivalent protein substitutions.
 Egg white removed. Whole eggs use a clearly labelled 50 g edible cooked-weight assumption per egg.
-Coles tuna 8675339 is a separate branded item, priced per can; 95 g net weight is not treated as drained weight.
+Oil-blend tuna is priced per 95 g can; the package's net contents are not treated as drained weight.
 Regular cheddar, dry red lentils and raw peeled prawns replace incompatible nutrition states.
 Skim milk uses AFCD per-100-mL data. Vitasoy Calci-Plus uses its manufacturer values at https://soy.com.au/product/soy-milk-calci-plus/ (3.2 g protein and 64 kcal per 100 mL).
-Pork 2359370 uses $18.50/kg and an estimated 400 g pack; salmon 126497 uses $48/kg only, with pack price explicitly null.
-Removed canned items remain only in historical import files. Milk and barramundi are now mapped as described above; barramundi edible yield remains an explicit assumption, not verified bone removal.
+Pork is sold by variable weight and therefore has a portion unit price but no final pack total.
+Removed canned items remain only in historical import files.
 Tests: node review-test.cjs. No unattended refresh.
 
 ## Earlier snapshot history (superseded coverage counts)

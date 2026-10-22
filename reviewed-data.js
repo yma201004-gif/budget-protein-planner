@@ -573,5 +573,177 @@
  broccoli.offers.Woolworths.nutrition={protein:2.9,energyKj:101,kcal:101/4.184,fat:1,carbs:1.2,fibre:2.5,
    source:broccoli.offers.Woolworths.url,nutritionSourceType:"Woolworths product nutrition"};
  broccoli.quality="Comparable own-brand frozen broccoli, not identical products. Nutrition follows the selected retailer's label: Woolworths 2.9 g protein and 101 kJ; Coles 4.7 g and 194 kJ per 100 g. Weigh frozen before cooking. Cook fully; no cooked yield assumed. Check packaging for label changes.";
+
+ // Final dual-retailer price completion. Products without a reliable pair were
+ // replaced with same-format Coles and Woolworths own-brand protein foods.
+ const lentils=FOODS.find(f=>f.id==="F005184");
+ Object.assign(lentils,{
+   name:"Red split lentils, dry",
+   description:"Dry red split lentils, weighed before cooking.",
+   quality:"AFCD dry red-lentil nutrition. The exact same Katoomba Ingredients 1 kg product is selected at both retailers. Enter dry weight before cooking; cooked weight is not interchangeable.",
+   comparison:"Same Katoomba 1 kg product at both retailers",
+   missingReason:"No matching product for this retailer.",
+   offers:{
+     Woolworths:{id:"woolworths_753947",name:"Katoomba Ingredients Red Lentils 1kg",price:3.5,pack:1000,
+       url:"https://www.woolworths.com.au/shop/productdetails/753947/katoomba-ingredients-red-lentils",
+       updated_at:"2026-10-20T00:00:00.000Z",source:"WhichGrocer catalogue snapshot",out_of_stock:false,
+       is_stale:false,is_special:true,match_type:"exact"},
+     Coles:{id:"coles_4683608",name:"Katoomba Red Lentils 1kg",price:4,pack:1000,
+       url:"https://www.coles.com.au/product/4683608",updated_at:"2026-10-20T00:00:00.000Z",
+       source:"WhichGrocer catalogue snapshot",out_of_stock:false,is_stale:false,match_type:"exact"}
+   }
+ });
+
+ const milkOwnBrand=FOODS.find(f=>f.id==="F005614");
+ Object.assign(milkOwnBrand,{
+   name:"Lite milk, 1L (store brand)",
+   description:"Fresh reduced-fat cow milk sold in paired Coles and Woolworths 1 L bottles.",
+   protein:3.4,energyKj:184,kcal:44,fat:1.25,carbs:4.85,fibre:0.01,
+   source:"https://www.coles.com.au/product/1993256",
+   nutritionSourceType:"Retailer product labels",
+   nutritionRow:null,detailsRow:null,
+   quality:"Retailer-specific product nutrition is used per 100 mL: Coles Lite Milk (3.4 g protein, 184 kJ, 1.2 g fat) and Woolworths Lite Milk (3.4 g protein, 189 kJ, 1.3 g fat). Both are 1 L fresh own-brand products. Check packaging for reformulation.",
+   comparison:"Paired Coles and Woolworths 1 L light-milk bottles",
+   missingReason:"No matching product for this retailer.",
+   offers:{
+     Woolworths:{id:"woolworths_382737",name:"Woolworths Lite Milk 1L",price:1.75,pack:1000,
+       url:"https://www.woolworths.com.au/shop/productdetails/382737/woolworths-lite-milk",
+       updated_at:"2026-10-20T00:00:00.000Z",source:"WhichGrocer catalogue snapshot",out_of_stock:false,
+       is_stale:false,match_type:"own-brand-pair",
+       nutrition:{protein:3.4,energyKj:189,kcal:189/4.184,fat:1.3,carbs:4.9,fibre:null,
+         source:"https://www.woolworths.com.au/shop/productdetails/382737/woolworths-lite-milk",
+         nutritionSourceType:"Woolworths product nutrition"}},
+     Coles:{id:"coles_1993256",name:"Coles Lite Milk Bottle 1L",price:1.75,pack:1000,
+       url:"https://www.coles.com.au/product/1993256",updated_at:"2026-10-20T00:00:00.000Z",
+       source:"WhichGrocer catalogue snapshot",out_of_stock:false,is_stale:false,match_type:"own-brand-pair",
+       nutrition:{protein:3.4,energyKj:184,kcal:44,fat:1.2,carbs:4.8,fibre:0.01,
+         source:"https://www.coles.com.au/product/1993256",nutritionSourceType:"Coles product nutrition"}}
+   }
+ });
+
+ const pork=FOODS.find(f=>f.id==="F006899");
+ Object.assign(pork,{
+   name:"Pork fillet, lean, raw (sold by weight)",
+   description:"Raw lean pork fillet purchased at variable weight.",
+   quality:"AFCD lean-pork nutrition proxy. Both offers are retailer own-brand pork fillet sold at $18.50/kg by variable weight, so portion cost is available but the final pack total is not. Trim and fat cover can vary.",
+   comparison:"Paired Coles and Woolworths own-brand pork fillet sold by weight",
+   missingReason:"No matching product for this retailer.",
+   offers:{
+     Woolworths:{id:"woolworths_675671",name:"Woolworths Pork Fillet Heart Smart 250g-600g",
+       price:null,pack:null,unitPrice:1.85,
+       url:"https://www.woolworths.com.au/shop/productdetails/675671/woolworths-pork-fillet-heart-smart",
+       updated_at:"2026-10-20T00:00:00.000Z",source:"WhichGrocer catalogue snapshot",out_of_stock:false,
+       is_stale:false,variableWeight:true,match_type:"own-brand-pair"},
+     Coles:{id:"coles_2359370",name:"Coles Pork Fillet approx. 400g",price:null,pack:null,unitPrice:1.85,
+       url:"https://www.coles.com.au/product/2359370",updated_at:"2026-10-20T00:00:00.000Z",
+       source:"WhichGrocer catalogue snapshot",out_of_stock:false,is_stale:false,
+       variableWeight:true,match_type:"own-brand-pair"}
+   }
+ });
+
+ const salmon=FOODS.find(f=>f.id==="F007827");
+ Object.assign(salmon,{
+   name:"Salmon portions, skin off, raw (store brand)",
+   description:"Raw Atlantic salmon portions with skin removed, sold as paired 4-pack 460 g store-brand products.",
+   quality:"AFCD generic raw-salmon proxy; selected retailer product nutrition is used per 100 g. Both offers are 4-pack 460 g own-brand portions with skin removed. Retail labels differ slightly, so check packaging.",
+   comparison:"Paired Coles and Woolworths 4-pack 460 g skin-off salmon portions",
+   missingReason:"No matching product for this retailer.",
+   offers:{
+     Woolworths:{id:"woolworths_157055",name:"Woolworths 4 Pack Salmon Portions Skin Off 460g",price:24,pack:460,
+       url:"https://www.woolworths.com.au/shop/productdetails/157055/woolworths-4-pack-salmon-portions-skin-off",
+       updated_at:"2026-10-20T00:00:00.000Z",source:"WhichGrocer catalogue snapshot",out_of_stock:false,
+       is_stale:false,match_type:"own-brand-pair",
+       nutrition:{protein:20.5,energyKj:966,kcal:966/4.184,fat:16.7,carbs:1,fibre:null,
+         source:"https://www.woolworths.com.au/shop/productdetails/157055/woolworths-4-pack-salmon-portions-skin-off",
+         nutritionSourceType:"Woolworths product nutrition"}},
+     Coles:{id:"coles_3613822",name:"Coles Tasmanian Salmon Portions Skin Off 4 Pack 460g",price:24,pack:460,
+       url:"https://www.coles.com.au/product/3613822",updated_at:"2026-10-20T00:00:00.000Z",
+       source:"WhichGrocer catalogue snapshot",out_of_stock:false,is_stale:false,match_type:"own-brand-pair",
+       nutrition:{protein:21,energyKj:968,kcal:968/4.184,fat:16.2,carbs:0.37,fibre:0.6,
+         source:"https://www.coles.com.au/product/3613822",nutritionSourceType:"Coles product nutrition"}}
+   }
+ });
+
+ const tuna=FOODS.find(f=>f.id==="COLES_TUNA_95");
+ Object.assign(tuna,{
+   id:"STORE_TUNA_95",
+   name:"Tuna chunks in olive oil blend, solid portion (95 g can)",
+   description:"Paired Coles and Woolworths own-brand 95 g tuna cans.",
+   source:"https://www.coles.com.au/product/8675339",
+   nutritionSourceType:"Retailer product labels",
+   quality:"The selected retailer's can-label nutrition is used. Coles reports 15.7 g protein and 127 kcal per can; Woolworths reports 18.3 g protein and 510 kJ per can. Nutrition is for the labelled serving or solid portion; 95 g net contents is not assumed to be drained weight.",
+   comparison:"Paired Coles and Woolworths own-brand 95 g tuna cans",
+   missingReason:"No matching product for this retailer.",
+   offers:{
+     Woolworths:{id:"woolworths_6002820",name:"Woolworths Yellowfin Tuna Chunks in Olive Oil Blend 95g",
+       price:2,pack:1,currency:"AUD",url:"https://www.woolworths.com.au/shop/productdetails/6002820/woolworths-yellowfin-tuna-chunks-in-olive-oil-blend",
+       updated_at:"2026-10-20T00:00:00.000Z",source:"WhichGrocer catalogue snapshot",out_of_stock:false,
+       is_stale:false,match_type:"own-brand-pair",
+       nutrition:{protein:18.3,energyKj:510,kcal:510/4.184,fat:5.4,carbs:0.1,fibre:null,
+         source:"https://www.woolworths.com.au/shop/productdetails/6002820/woolworths-yellowfin-tuna-chunks-in-olive-oil-blend",
+         nutritionSourceType:"Woolworths product nutrition"}},
+     Coles:{id:"coles_8675339",name:"Coles Tuna Chunks in Olive Oil Blend 95g",price:1.1,pack:1,
+       currency:"AUD",url:"https://www.coles.com.au/product/8675339",updated_at:"2026-10-20T00:00:00.000Z",
+       source:"WhichGrocer catalogue snapshot",out_of_stock:false,is_stale:false,match_type:"own-brand-pair",
+       nutrition:{protein:15.7,energyKj:533,kcal:127,fat:7.1,carbs:0,fibre:0,
+         source:"https://www.coles.com.au/product/8675339",nutritionSourceType:"Coles packaging label"}}
+   }
+ });
+
+ // Barramundi and turkey lacked stable same-format own-brand pairs. Replace
+ // those rows rather than attach unrelated product prices to the old names.
+ const beefStrips=FOODS.find(f=>f.id==="F000386");
+ Object.assign(beefStrips,{
+   id:"F000931",
+   name:"Beef stir-fry strips, lean, raw",
+   category:"Red meat",
+   protein:27.2,energyKj:536,kcal:536/4.184,fat:2,carbs:0,fibre:0,
+   source:"https://www.foodstandards.gov.au/science-data/food-nutrient-databases/afcd/data-files",
+   nutritionRow:786,detailsRow:786,derivation:"Analysed",
+   nutritionSheet:"All solids & liquids per 100 g",nutritionSourceType:"AFCD",
+   description:"Raw beef purchased as stir-fry strips and likely to come from various regions of the carcase; lean muscle meat with separable fat removed.",
+   quality:"AFCD lean beef stir-fry nutrition. Both selected offers are raw 500 g stir-fry-strip products from the retailers' own ranges. Source cuts, trim and fat content can vary between retailer products.",
+   comparison:"Paired Coles and Woolworths own-brand 500 g raw stir-fry beef",
+   missingReason:"No matching product for this retailer.",
+   offers:{
+     Woolworths:{id:"woolworths_175569",name:"Macro Grass Fed Australian Stir-Fry Beef 500g",price:13,pack:500,
+       url:"https://www.woolworths.com.au/shop/productdetails/175569/macro-grass-fed-australian-stir-fry-beef",
+       updated_at:"2026-10-20T00:00:00.000Z",source:"WhichGrocer catalogue snapshot",out_of_stock:false,
+       is_stale:false,match_type:"own-brand-pair"},
+     Coles:{id:"coles_9990965",name:"Coles Beef Stir Fry 500g",price:12,pack:500,
+       url:"https://www.coles.com.au/product/9990965",updated_at:"2026-10-20T00:00:00.000Z",
+       source:"WhichGrocer catalogue snapshot",out_of_stock:false,is_stale:false,
+       match_type:"own-brand-pair"}
+   }
+ });
+
+ const lambSteak=FOODS.find(f=>f.id==="F009307");
+ Object.assign(lambSteak,{
+   id:"F005013",
+   name:"Lamb leg steak, lean, raw",
+   category:"Red meat",
+   protein:21.1,energyKj:477,kcal:477/4.184,fat:3.2,carbs:0,fibre:0,
+   source:"https://www.foodstandards.gov.au/science-data/food-nutrient-databases/afcd/data-files",
+   nutritionRow:886,detailsRow:886,derivation:"Analysed",
+   nutritionSheet:"All solids & liquids per 100 g",nutritionSourceType:"AFCD",
+   description:"Raw lamb from the hind portion of the carcase, sold as a lean leg steak; separable fat removed.",
+   quality:"AFCD lean lamb-leg nutrition proxy. Both selected offers are 270 g raw lamb leg steaks from the retailers' own ranges. Exact trim and seam-fat lines can vary; check the pack label if precise fat intake matters.",
+   comparison:"Paired Coles and Woolworths own-brand 270 g raw lamb leg steaks",
+   missingReason:"No matching product for this retailer.",
+   offers:{
+     Woolworths:{id:"woolworths_675490",name:"Woolworths Lamb Leg Steak 270g",price:9,pack:270,
+       url:"https://www.woolworths.com.au/shop/productdetails/675490/woolworths-lamb-leg-steak",
+       updated_at:"2026-10-20T00:00:00.000Z",source:"WhichGrocer catalogue snapshot",out_of_stock:false,
+       is_stale:false,match_type:"own-brand-pair"},
+     Coles:{id:"coles_3958405",name:"Coles Lamb Leg Steak 270g",price:9,pack:270,
+       url:"https://www.coles.com.au/product/3958405",updated_at:"2026-10-20T00:00:00.000Z",
+       source:"WhichGrocer catalogue snapshot",out_of_stock:false,is_stale:false,
+       match_type:"own-brand-pair"}
+   }
+ });
+ window.REVIEW_META={
+   date:"2026-10-21",
+   note:"All 24 foods now have selected in-stock prices at both Coles and Woolworths. Barramundi and turkey were replaced because no stable paired own-brand products existed; lentils use the identical Katoomba product at both stores. Catalogue snapshots are not live shelf prices."
+ };
 })();
 
