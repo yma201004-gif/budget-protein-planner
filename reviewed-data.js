@@ -81,7 +81,7 @@
     }
   }
 ];
- window.FOODS=window.FOODS.filter(f=>f.id!=="F003705");
+ window.FOODS=window.FOODS.filter(f=>!["F003705","F009300","F000448","F002880","F007853"].includes(f.id));
  for(const f of window.FOODS){
    const id=replacements[f.id]||f.id,n=nutrients.find(n=>n.id===id);
    f.basis=100;f.nutritionSheet="All solids & liquids per 100 g";f.nutritionSourceType="AFCD";
@@ -412,12 +412,149 @@
  F000448:"Drained weight not verified; nutrition only.",
  F002880:"Drained weight not verified; nutrition only.",
  F007853:"Drained weight not verified; nutrition only.",
- F009300:"Water-packed tuna: drained weight not verified. The separate Coles oil-blend tuna uses its own label.",
  F000386:"Unseasoned, boneless frozen fillet not verified; seasoned and skin-on alternatives not substituted.",
  F005614:"Matching approximately 1% fat milk not verified; 2% and extra-protein alternatives excluded."
  };
  for(const f of FOODS){f.missingReason=reasons[f.id]||f.missingReason||"No matching product for this retailer.";if(mapped[f.id])f.missingReason="No matching product for this retailer.";}
  FOODS.find(f=>f.id==="F005184").quality+=". Dry weight before cooking; canned alternative lacked verified drained weight.";
- window.REVIEW_META={date:"2026-10-20",note:"Units and food states reviewed. Catalogue snapshots are not live shelf prices."};
+ const milk=FOODS.find(f=>f.id==="F005614");
+ Object.assign(milk,{name:"Devondale Light Milk, 1.3% fat",protein:3.6,energyKj:188,kcal:188/4.184,fat:1.3,carbs:4.6,fibre:null,
+   nutritionSourceType:"Coles product nutrition",source:"https://www.coles.com.au/product/devondale-light-milk-3l-1909952",
+   nutritionRow:null,detailsRow:null,quality:"Product nutrition per 100 mL, verified for the 3 L pack. Fibre not reported. Not the original generic 1% AFCD record.",
+   missingReason:"No matching product for this retailer.",offers:{Coles:{id:"coles_1909952",name:"Devondale Light Milk 3L",price:6.4,pack:3000,
+   url:"https://www.coles.com.au/product/devondale-light-milk-3l-1909952",updated_at:"2026-10-20T00:00:00.000Z",source:"WhichGrocer catalogue snapshot",out_of_stock:false,is_stale:false}}});
+ const barra=FOODS.find(f=>f.id==="F000386");
+ barra.quality="AFCD raw barramundi nutrition estimate, not branded-label values. User-approved assumption: all 300 g is edible boneless flesh. Bone removal is NOT verified; check for bones. Any discarded bones reduce edible yield and change portion-cost estimates.";
+ barra.missingReason="No matching product for this retailer.";
+ barra.offers={Woolworths:{id:"woolworths_6050189",name:"Humpty Doo Barramundi Portions Skin Off 300g",price:17,pack:300,
+   url:"https://www.woolworths.com.au/shop/productdetails/6050189/humpty-doo-barramundi-portions-skin-off",updated_at:"2026-10-20T00:00:00.000Z",
+   source:"WhichGrocer catalogue snapshot",out_of_stock:false,is_stale:false,edibleYieldAssumed:true}};
+ FOODS.push(...[
+  {
+    "id": "SUNRICE_LONG_GRAIN",
+    "name": "Rice, SunRice long grain white, dry (before cooking)",
+    "category": "Cereal",
+    "protein": 8,
+    "energyKj": 1490,
+    "kcal": 356.1185468451243,
+    "fat": null,
+    "fatNote": "Less than 1 g per 100 g",
+    "carbs": 77.4,
+    "fibre": 1.1,
+    "quality": "Product nutrition per 100 g DRY rice. Weigh before cooking; cooked rice weight is not interchangeable. Fat is reported as less than 1 g, not an exact zero.",
+    "unit": "g",
+    "basis": 100,
+    "source": "https://www.coles.com.au/product/sunrice-premium-long-grain-rice-2kg-296960",
+    "nutritionSourceType": "Coles product nutrition",
+    "nutritionRow": null,
+    "detailsRow": null,
+    "missingReason": "No verified matching offer for this retailer.",
+    "offers": {
+      "Coles": {
+        "id": "coles_296960",
+        "name": "sunrice premium long grain rice 2kg",
+        "store": "coles",
+        "price": 4.5,
+        "currency": "AUD",
+        "cup_price": "$0.23/ 100g",
+        "unit_price": 0.23,
+        "unit_measure": "100g",
+        "uom": "kg",
+        "weight": 2,
+        "url": "https://www.coles.com.au/product/sunrice-premium-long-grain-rice-2kg-296960",
+        "category": "pantry",
+        "out_of_stock": false,
+        "is_special": false,
+        "updated_at": "2026-10-20T00:00:00.000Z",
+        "is_stale": false,
+        "region": "AU",
+        "pack": 2000
+      }
+    }
+  },
+  {
+    "id": "COLES_BROCCOLI",
+    "name": "Broccoli, Coles frozen florets (before cooking)",
+    "category": "Vegetables",
+    "protein": 4.7,
+    "energyKj": 194,
+    "kcal": 46.4,
+    "fat": 0.9,
+    "carbs": 3,
+    "fibre": 3.7,
+    "quality": "Coles product nutrition per 100 g as sold. Weigh frozen before cooking. Ingredients: 100% broccoli. Cook fully before eating; no cooked-weight yield assumed.",
+    "unit": "g",
+    "basis": 100,
+    "source": "https://www.coles.com.au/product/coles-frozen-broccoli-florets-500g-5341010",
+    "nutritionSourceType": "Coles product nutrition",
+    "nutritionRow": null,
+    "detailsRow": null,
+    "missingReason": "No verified matching offer for this retailer.",
+    "offers": {
+      "Coles": {
+        "id": "coles_5341010",
+        "name": "coles frozen broccoli florets 500g",
+        "store": "coles",
+        "price": 4,
+        "currency": "AUD",
+        "cup_price": "$8.00/ 1kg",
+        "unit_price": 8,
+        "unit_measure": "kg",
+        "uom": "g",
+        "weight": 500,
+        "url": "https://www.coles.com.au/product/coles-frozen-broccoli-florets-500g-5341010",
+        "category": "frozen",
+        "out_of_stock": false,
+        "is_special": false,
+        "updated_at": "2026-10-20T00:00:00.000Z",
+        "is_stale": false,
+        "region": "AU",
+        "pack": 500
+      }
+    }
+  },
+  {
+    "id": "HELGAS_WHOLEMEAL",
+    "name": "Bread, Helga's Traditional Wholemeal",
+    "category": "Cereal",
+    "protein": 8.1,
+    "energyKj": 980,
+    "kcal": 234.22562141491395,
+    "fat": 2.6,
+    "carbs": 40.6,
+    "fibre": 5.4,
+    "quality": "Product nutrition per 100 g bread as sold. Enter grams; label serving is 83 g (2 slices). Slice weights can vary. Not gluten-free; contains wheat, rye and soy.",
+    "unit": "g",
+    "basis": 100,
+    "source": "https://www.coles.com.au/product/helga%27s-traditional-wholemeal-bread-750g-5969435",
+    "nutritionSourceType": "Coles product nutrition",
+    "nutritionRow": null,
+    "detailsRow": null,
+    "missingReason": "No verified matching offer for this retailer.",
+    "offers": {
+      "Coles": {
+        "id": "coles_5969435",
+        "name": "helgas traditional wholemeal bread 750g",
+        "store": "coles",
+        "price": 5.2,
+        "currency": "AUD",
+        "cup_price": "$0.69/ 100g",
+        "unit_price": 0.69,
+        "unit_measure": "100g",
+        "uom": "g",
+        "weight": 750,
+        "url": "https://www.coles.com.au/product/helga%27s-traditional-wholemeal-bread-750g-5969435",
+        "category": "bakery",
+        "out_of_stock": false,
+        "is_special": false,
+        "updated_at": "2026-10-20T00:00:00.000Z",
+        "is_stale": false,
+        "region": "AU",
+        "pack": 750
+      }
+    }
+  }
+]);
+ window.REVIEW_META={date:"2026-10-20",note:"Units and food states reviewed. Catalogue snapshots are not live shelf prices. Barramundi edible yield is an explicit assumption. Three canned foods replaced with rice, frozen broccoli and wholemeal bread."};
 })();
 
