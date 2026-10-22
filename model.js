@@ -10,8 +10,8 @@
     let protein=0,kcal=0,cost=0,purchase=0,missing=false,purchaseMissing=false,estimatedPurchase=false;
     const lines=Object.entries(meal).filter(([,g])=>Number.isFinite(g)&&g>0).map(([id,g])=>{
       const food=foods.find(f=>f.id===id);if(!food)throw Error("Unknown food");
-      const basis=food.basis||100,selected=offer(food,retailer),p=food.protein*g/basis;
-      protein+=p;kcal+=food.kcal*g/basis;
+      const basis=food.basis||100,selected=offer(food,retailer),nutrition=selected?.nutrition||food,p=nutrition.protein*g/basis;
+      protein+=p;kcal+=nutrition.kcal*g/basis;
       const portion=selected?selected.unitPrice*g/basis:null;
       const packs=selected&&selected.pack>0&&Number.isFinite(selected.price)&&selected.price>0?Math.ceil(g/selected.pack):null;
       if(selected)cost+=portion;else missing=true;

@@ -556,5 +556,22 @@
   }
 ]);
  window.REVIEW_META={date:"2026-10-20",note:"Units and food states reviewed. Catalogue snapshots are not live shelf prices. Barramundi edible yield is an explicit assumption. Three canned foods replaced with rice, frozen broccoli and wholemeal bread."};
+ const extraOffers=[
+  ["SUNRICE_LONG_GRAIN","36502","sunrice-white-rice-premium-long-grain",4.5,2000,"Same product and pack"],
+  ["HELGAS_WHOLEMEAL","84129","helga-s-bread-traditional-wholemeal",5.2,750,"Same product and pack"],
+  ["COLES_BROCCOLI","768559","woolworths-frozen-australian-broccoli-florets",4,500,"Comparable own-brand products"]
+ ];
+ for(const [id,sku,slug,price,pack,match] of extraOffers){
+   const f=FOODS.find(f=>f.id===id);
+   f.comparison=match;
+   f.offers.Woolworths={id:"woolworths_"+sku,name:slug.replaceAll("-"," ")+" "+pack+"g",price,pack,
+     url:"https://www.woolworths.com.au/shop/productdetails/"+sku+"/"+slug,
+     updated_at:"2026-10-20T00:00:00.000Z",out_of_stock:false,is_stale:false,match_type:id==="COLES_BROCCOLI"?"comparable":"exact"};
+ }
+ const broccoli=FOODS.find(f=>f.id==="COLES_BROCCOLI");
+ broccoli.name="Broccoli, frozen florets (before cooking)";
+ broccoli.offers.Woolworths.nutrition={protein:2.9,energyKj:101,kcal:101/4.184,fat:1,carbs:1.2,fibre:2.5,
+   source:broccoli.offers.Woolworths.url,nutritionSourceType:"Woolworths product nutrition"};
+ broccoli.quality="Comparable own-brand frozen broccoli, not identical products. Nutrition follows the selected retailer's label: Woolworths 2.9 g protein and 101 kJ; Coles 4.7 g and 194 kJ per 100 g. Weigh frozen before cooking. Cook fully; no cooked yield assumed. Check packaging for label changes.";
 })();
 
