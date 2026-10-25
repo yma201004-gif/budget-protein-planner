@@ -5,6 +5,14 @@ Student meal-planning prototype for comparing nutrition and portion costs.
 Visit https://yma201004-gif.github.io/budget-protein-planner/ after GitHub Pages deployment.
 Alternatively download the repository ZIP, extract it, and open index.html. Keep all JavaScript and CSS files together.
 
+For a reproducible local run with a standard Python/conda installation:
+
+```text
+python run.py
+```
+
+Then open `http://127.0.0.1:8000`. The dashboard uses only Python's standard library and browser-native HTML, CSS and JavaScript; no external packages or network requests are required at runtime. All runtime data is included in the submission.
+
 ## Data and limitations
 - 24 food options. Barramundi and turkey breast were replaced by lean beef stir-fry strips and lamb leg steak because no stable paired own-brand products were available. Egg white and water-packed tuna remain excluded; rice, frozen broccoli and wholemeal bread provide additional meal variety.
 - AFCD Food Details and Nutrient Profiles joined by Public Food Key. Milk uses per-100-mL data. Other generic nutrients use per-100-g data; eggs are scaled to an assumed 50 g cooked edible portion per egg.
