@@ -38,6 +38,19 @@ Then open `http://127.0.0.1:8000`. The dashboard uses only Python's standard lib
 - The price chart opens with the 10 cheapest visible foods and can be switched to all visible foods, keeping the comparison readable without hiding the full data.
 - Retailer colour is consistent across the legend, bars, price cues and active cost card; bar length encodes cost per 25 g protein rather than relying on colour alone.
 
+## Accessibility
+
+The local accessible version targets WCAG 2.2 AA. It includes a skip link,
+visible form labels, table captions and scoped headers, keyboard-accessible data
+tables, one debounced live status region, accessible chart summaries with
+expandable data lists, explicit action labels, progress value text, focus
+recovery after key actions, stronger text contrast and responsive reflow. At
+mobile widths, ingredient rows become labelled cards; repeated source links are
+kept in one provenance disclosure to reduce keyboard tab stops. Retailer bars
+also use solid versus striped patterns so identity is not communicated by
+colour alone.
+See `ACCESSIBILITY.md` for the implemented checks and remaining manual tests.
+
 ## Files
 index.html, style.css, app.js: interface.
 data.js: AFCD nutrient records and historical source information.
