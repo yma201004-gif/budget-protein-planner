@@ -25,6 +25,16 @@ needed at runtime.
 - `app.py`: layout, callbacks and calculation helpers
 - `data/foods.json`: 24 foods and paired retailer offers
 - `requirements.txt`: Dash and Plotly dependencies
+- `ACCESSIBILITY.md`: accessibility implementation and verification record
+
+## Accessibility
+
+The dashboard includes a keyboard skip link, visible focus treatment,
+programmatic labels, a single polite status region, focus restoration after
+meal actions, text alternatives for charts, accessible progress values, a
+labelled table region and a responsive card layout. It targets WCAG 2.2 AA;
+automated Lighthouse testing scored 100/100 for accessibility on 27 October
+2026. This is not a claim of formal certification.
 
 ## Notes
 

@@ -2,10 +2,21 @@ from __future__ import annotations
 
 import json
 import math
+import time
 from pathlib import Path
 
 import plotly.graph_objects as go
-from dash import Dash, Input, Output, State, dcc, html, no_update
+from dash import (
+    Dash,
+    Input,
+    Output,
+    State,
+    clientside_callback,
+    ctx,
+    dcc,
+    html,
+    no_update,
+)
 
 
 APP_DIR = Path(__file__).resolve().parent
@@ -45,6 +56,11 @@ def cost_25(food, retailer):
 
 def money(value):
     return "Unavailable" if value is None else f"${value:.2f}"
+
+
+def focus_payload(selector):
+    """Return a fresh focus request so repeated actions still fire."""
+    return {"selector": selector, "nonce": time.time_ns()}
 
 
 def filter_foods(search, category, retailer, sort_order):
@@ -345,6 +361,20 @@ app.index_string = """
             color: var(--ink);
             font: 15px "Segoe UI", Arial, sans-serif;
         }
+        .skip-link {
+            position: absolute;
+            top: -64px;
+            left: 12px;
+            z-index: 1000;
+            padding: 10px 14px;
+            border-radius: 0 0 6px 6px;
+            background: #173d37;
+            color: white;
+            font-weight: 700;
+        }
+        .skip-link:focus {
+            top: 0;
+        }
         header {
             background: #173d37;
             color: white;
@@ -358,6 +388,10 @@ app.index_string = """
         header .brand-lockup { display: flex; align-items: baseline; }
         header .brand-title { margin-left: 14px; font-size: 13px; font-weight: 500; }
         main { max-width: 1550px; margin: auto; padding: 30px 4%; }
+        main:focus {
+            outline: 3px solid #6ba993;
+            outline-offset: 4px;
+        }
         h1 { font-size: 38px; letter-spacing: -1.3px; margin: 8px 0; }
         h2 { font-size: 20px; margin: 8px 0 14px; }
         h3 { font-size: 16px; margin: 8px 0; }
@@ -446,7 +480,9 @@ app.index_string = """
             overflow: auto;
             border-radius: 4px;
         }
-        .table-wrap:focus-visible, button:focus-visible, a:focus-visible {
+        .table-wrap:focus-visible, button:focus-visible, a:focus-visible,
+        input:focus-visible, .Select-control:focus, .Select-control:focus-visible,
+        summary:focus-visible, [tabindex]:focus-visible {
             outline: 3px solid #6ba993;
             outline-offset: 2px;
         }
@@ -529,6 +565,10 @@ app.index_string = """
         summary { min-height: 26px; line-height: 26px; cursor: pointer; color: var(--green); font-weight: 600; }
         .chart-note, .footnote, .sub { font-size: 12px; }
         .source-entry { padding: 8px 0; border-bottom: 1px solid #edf0eb; font-size: 12px; color: var(--muted); }
+        .accessibility-panel {
+            margin-top: 18px;
+            border-left: 4px solid var(--green);
+        }
         .sr-only {
             position: absolute !important;
             width: 1px !important;
@@ -590,13 +630,80 @@ app.index_string = """
 <body>
     {%app_entry%}
     <footer>{%config%}{%scripts%}{%renderer%}</footer>
+    <script>
+        (function () {
+            const dropdownLabels = {
+                retailer: "Retailer preference",
+                category: "Food category",
+                sort: "Sort foods",
+                "chart-limit": "Price chart scope"
+            };
+            let updateQueued = false;
+
+            function repairDropdownAccessibility() {
+                document.querySelectorAll(".Select-value-label").forEach(function (value) {
+                    value.removeAttribute("role");
+                    value.removeAttribute("aria-selected");
+                });
+
+                document.querySelectorAll(".dash-dropdown").forEach(function (root) {
+                    const input = root.querySelector(".Select-input input[role='combobox']");
+                    const label = dropdownLabels[root.id];
+                    if (!input || !label) {
+                        return;
+                    }
+                    const selected = root.querySelector(".Select-value-label");
+                    const selectedText = selected ? selected.textContent.trim() : "";
+                    input.setAttribute(
+                        "aria-label",
+                        selectedText ? label + ". Selected: " + selectedText : label
+                    );
+                    if (input.getAttribute("aria-expanded") === "false") {
+                        input.removeAttribute("aria-activedescendant");
+                    }
+                });
+            }
+
+            function scheduleRepair() {
+                if (updateQueued) {
+                    return;
+                }
+                updateQueued = true;
+                window.requestAnimationFrame(function () {
+                    updateQueued = false;
+                    repairDropdownAccessibility();
+                });
+            }
+
+            const observer = new MutationObserver(scheduleRepair);
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true,
+                characterData: true
+            });
+            scheduleRepair();
+        })();
+    </script>
 </body>
 </html>
 """
 
 app.layout = html.Div(
     [
+        html.A(
+            "Skip to dashboard",
+            href="#main-content",
+            className="skip-link",
+        ),
         dcc.Store(id="meal-store", data=DEFAULT_MEAL),
+        dcc.Store(id="focus-target", data=None),
+        html.Div(id="focus-result", className="sr-only"),
+        html.Div(
+            id="live-status",
+            className="sr-only",
+            role="status",
+            **{"aria-live": "polite", "aria-atomic": "true"},
+        ),
         html.Header(
             [
                 html.Div(
@@ -847,7 +954,11 @@ app.layout = html.Div(
                                                     "02 / COMBINE",
                                                     className="eyebrow",
                                                 ),
-                                                html.H2("Your meal"),
+                                                html.H2(
+                                                    "Your meal",
+                                                    id="meal-title",
+                                                    tabIndex=-1,
+                                                ),
                                             ]
                                         ),
                                         html.Button(
@@ -929,7 +1040,8 @@ app.layout = html.Div(
                                     max=100,
                                     value=0,
                                     **{
-                                        "aria-label": "Protein target progress"
+                                        "aria-label": "Protein target progress",
+                                        "aria-valuetext": "0% of target",
                                     },
                                 ),
                                 html.P(id="protein-status"),
@@ -950,7 +1062,8 @@ app.layout = html.Div(
                                     max=100,
                                     value=0,
                                     **{
-                                        "aria-label": "Portion budget progress"
+                                        "aria-label": "Portion budget progress",
+                                        "aria-valuetext": "0% of budget",
                                     },
                                 ),
                                 html.P(id="budget-status"),
@@ -968,11 +1081,20 @@ app.layout = html.Div(
                                 html.H2("Selected meal: protein contribution"),
                                 html.P(
                                     "Bar length shows each food's contribution "
-                                    "in grams."
+                                    "in grams.",
+                                    id="protein-chart-description",
                                 ),
-                                dcc.Graph(
-                                    id="protein-chart",
-                                    config={"displayModeBar": False},
+                                html.Div(
+                                    dcc.Graph(
+                                        id="protein-chart",
+                                        config={"displayModeBar": False},
+                                    ),
+                                    id="protein-chart-a11y",
+                                    role="img",
+                                    **{
+                                        "aria-label": "Protein contribution chart.",
+                                        "aria-describedby": "protein-chart-description",
+                                    },
                                 ),
                                 html.Div(id="protein-data", className="sr-only"),
                             ],
@@ -1009,19 +1131,33 @@ app.layout = html.Div(
                                             clearable=False,
                                             style={"width": "130px"},
                                         ),
+                                        html.Label(
+                                            "Price chart scope",
+                                            htmlFor="chart-limit",
+                                            className="sr-only",
+                                        ),
                                     ],
                                     className="section-head",
                                 ),
                                 html.P(id="price-caption", className="chart-note"),
-                                dcc.Graph(
-                                    id="price-chart",
-                                    config={"displayModeBar": False},
+                                html.Div(
+                                    dcc.Graph(
+                                        id="price-chart",
+                                        config={"displayModeBar": False},
+                                    ),
+                                    id="price-chart-a11y",
+                                    role="img",
+                                    **{
+                                        "aria-label": "Cost per 25 grams of protein chart.",
+                                        "aria-describedby": "price-caption price-chart-note",
+                                    },
                                 ),
                                 html.Div(id="price-data", className="sr-only"),
                                 html.P(
                                     "Lower bars mean less money per 25 g protein. "
                                     "Woolworths is solid; Coles is striped.",
                                     className="chart-note",
+                                    id="price-chart-note",
                                 ),
                             ],
                             className="panel",
@@ -1047,6 +1183,45 @@ app.layout = html.Div(
                     ],
                     className="panel",
                 ),
+                html.Details(
+                    [
+                        html.Summary("Accessibility features"),
+                        html.H2("Accessibility features"),
+                        html.P(
+                            "This dashboard is designed toward WCAG 2.2 AA. "
+                            "It has not been independently certified."
+                        ),
+                        html.Ul(
+                            [
+                                html.Li(
+                                    "Use the skip link or Tab and Shift+Tab. "
+                                    "All controls have visible focus."
+                                ),
+                                html.Li(
+                                    "Changes are announced through one polite "
+                                    "status message."
+                                ),
+                                html.Li(
+                                    "Dropdowns have explicit screen-reader names, "
+                                    "including the selected value."
+                                ),
+                                html.Li(
+                                    "Charts include concise summaries and hidden "
+                                    "data alternatives for screen readers."
+                                ),
+                                html.Li(
+                                    "Colours and striped patterns identify "
+                                    "retailers; text also communicates results."
+                                ),
+                                html.Li(
+                                    "Ingredient rows become labelled cards on "
+                                    "narrow screens."
+                                ),
+                            ]
+                        ),
+                    ],
+                    className="panel accessibility-panel",
+                ),
                 html.Footer(
                     [
                         html.Span(
@@ -1057,7 +1232,9 @@ app.layout = html.Div(
                         ),
                     ]
                 ),
-            ]
+            ],
+            id="main-content",
+            tabIndex=-1,
         ),
     ]
 )
@@ -1112,12 +1289,16 @@ def update_catalogue(search, category, sort_order, retailer, meal):
                         **{"data-label": "Cost per 25 g protein"},
                     ),
                     html.Td(
-                        html.Button(
-                            "+",
-                            id={"type": "add-food", "food": food["id"]},
-                            n_clicks=0,
-                            className="add",
-                            **{"aria-label": f"Add {food['name']} to meal"},
+                        html.Span(
+                            html.Button(
+                                "+",
+                                id={"type": "add-food", "food": food["id"]},
+                                n_clicks=0,
+                                className="add",
+                                **{"aria-label": f"Add {food['name']} to meal"},
+                            ),
+                            id=f"add-control-{food['id']}",
+                            className="add-control",
                         ),
                         **{"data-label": "Meal action"},
                     ),
@@ -1138,6 +1319,7 @@ def update_catalogue(search, category, sort_order, retailer, meal):
     Output("price-chart", "figure"),
     Output("price-caption", "children"),
     Output("price-data", "children"),
+    Output("price-chart-a11y", "aria-label"),
     Input("search", "value"),
     Input("category", "value"),
     Input("retailer", "value"),
@@ -1146,6 +1328,7 @@ def update_catalogue(search, category, sort_order, retailer, meal):
 def update_price_chart(search, category, retailer, limit):
     rows = filter_foods(search, category, retailer, "name")
     priced = [food for food in rows if cost_25(food, retailer)]
+    limit = limit or 10
     shown = sorted(priced, key=lambda food: cost_25(food, retailer))[:limit]
     figure = make_price_figure(shown, retailer, limit)
     caption = (
@@ -1165,7 +1348,11 @@ def update_price_chart(search, category, retailer, limit):
             for food in shown
         ]
     )
-    return figure, caption, data
+    chart_label = (
+        f"Cost per 25 grams of protein chart. Showing {len(shown)} cheapest "
+        f"of {len(priced)} visible foods, using {retailer} prices."
+    )
+    return figure, caption, data, chart_label
 
 
 @app.callback(
@@ -1178,21 +1365,30 @@ def update_price_chart(search, category, retailer, limit):
     Output("store-compare", "children"),
     Output("retailer-insight", "children"),
     Output("protein-progress", "value"),
+    Output("protein-progress", "aria-valuetext"),
     Output("protein-progress-label", "children"),
     Output("protein-status", "children"),
     Output("budget-progress", "value"),
+    Output("budget-progress", "aria-valuetext"),
     Output("budget-progress-label", "children"),
     Output("budget-status", "children"),
     Output("protein-chart", "figure"),
     Output("protein-data", "children"),
+    Output("protein-chart-a11y", "aria-label"),
     Input("meal-store", "data"),
     Input("retailer", "value"),
     Input("protein-target", "value"),
     Input("budget-target", "value"),
 )
 def update_meal(meal, retailer, protein_target, budget_target):
-    protein_target = protein_target or 40
-    budget_target = budget_target or 5
+    try:
+        protein_target = float(protein_target or 40)
+    except (TypeError, ValueError):
+        protein_target = 40.0
+    try:
+        budget_target = float(budget_target or 5)
+    except (TypeError, ValueError):
+        budget_target = 5.0
     result = calculate(meal, retailer)
     rows = []
     packs = []
@@ -1234,6 +1430,7 @@ def update_meal(meal, retailer, protein_target, budget_target):
                         **{"aria-label": f"Remove {food['name']}"},
                     ),
                 ],
+                id=f"meal-row-{food['id']}",
                 className="meal-row",
             )
         )
@@ -1323,6 +1520,16 @@ def update_meal(meal, retailer, protein_target, budget_target):
             for line in result["lines"]
         ]
     )
+    protein_chart_label = (
+        f"Protein contribution chart for {len(result['lines'])} meal "
+        f"ingredients, {result['protein']:.1f} grams total."
+    )
+    protein_value_text = (
+        f"{result['protein']:.1f} grams of a {protein_target:g} gram target."
+    )
+    budget_value_text = (
+        f"{money(result['cost'])} of a {money(budget_target)} portion budget."
+    )
     return (
         rows,
         f"{result['protein']:.1f} g",
@@ -1333,14 +1540,54 @@ def update_meal(meal, retailer, protein_target, budget_target):
         store_cards,
         retailer_note,
         protein_percent,
+        protein_value_text,
         f"{result['protein']:.1f} / {protein_target} g",
         protein_status,
         budget_percent,
+        budget_value_text,
         f"{money(result['cost'])} / {money(budget_target)}",
         budget_status,
         protein_chart,
         protein_data,
+        protein_chart_label,
     )
+
+
+@app.callback(
+    Output("live-status", "children"),
+    Input("search", "value"),
+    Input("category", "value"),
+    Input("sort", "value"),
+    Input("retailer", "value"),
+    Input("meal-store", "data"),
+    Input("protein-target", "value"),
+    Input("budget-target", "value"),
+    prevent_initial_call=True,
+)
+def announce_update(search, category, sort_order, retailer, meal,
+                    protein_target, budget_target):
+    trigger = ctx.triggered_id
+    if trigger in {"meal-store", "protein-target", "budget-target"}:
+        result = calculate(meal, retailer)
+        return (
+            f"Meal updated. {result['protein']:.1f} grams protein; "
+            f"{money(result['cost'])} portion cost."
+        )
+
+    rows = filter_foods(search, category, retailer, sort_order)
+    priced = [
+        (food, cost_25(food, retailer))
+        for food in rows
+        if cost_25(food, retailer) is not None
+    ]
+    message = f"{len(rows)} foods shown."
+    if priced:
+        cheapest, value = min(priced, key=lambda item: item[1])
+        message += (
+            f" Lowest cost per 25 grams of protein: "
+            f"{cheapest['name'].split(',')[0]} at {money(value)}."
+        )
+    return message
 
 
 def register_food_callbacks(food):
@@ -1348,44 +1595,47 @@ def register_food_callbacks(food):
 
     @app.callback(
         Output("meal-store", "data", allow_duplicate=True),
+        Output("focus-target", "data", allow_duplicate=True),
         Input({"type": "add-food", "food": food_id}, "n_clicks"),
         State("meal-store", "data"),
         prevent_initial_call=True,
     )
     def add_food(n_clicks, current):
         if not n_clicks:
-            return no_update
+            return no_update, no_update
         meal = dict(current or {})
         meal[food_id] = meal.get(food_id, 0) + food.get("basis", 100)
-        return meal
+        return meal, focus_payload(f"#add-control-{food_id} button")
 
     @app.callback(
         Output("meal-store", "data", allow_duplicate=True),
+        Output("focus-target", "data", allow_duplicate=True),
         Input({"type": "remove-food", "food": food_id}, "n_clicks"),
         State("meal-store", "data"),
         prevent_initial_call=True,
     )
     def remove_food(n_clicks, current):
         if not n_clicks:
-            return no_update
+            return no_update, no_update
         meal = dict(current or {})
         meal.pop(food_id, None)
-        return meal
+        return meal, focus_payload("#meal-title")
 
     @app.callback(
         Output("meal-store", "data", allow_duplicate=True),
+        Output("focus-target", "data", allow_duplicate=True),
         Input({"type": "grams", "food": food_id}, "value"),
         State("meal-store", "data"),
         prevent_initial_call=True,
     )
     def set_amount(value, current):
         if not isinstance(value, (int, float)) or value <= 0:
-            return no_update
+            return no_update, no_update
         meal = dict(current or {})
         if food_id not in meal or meal[food_id] == value:
-            return no_update
+            return no_update, no_update
         meal[food_id] = value
-        return meal
+        return meal, focus_payload(f"#meal-row-{food_id} input")
 
 
 for food in FOODS:
@@ -1394,11 +1644,34 @@ for food in FOODS:
 
 @app.callback(
     Output("meal-store", "data", allow_duplicate=True),
+    Output("focus-target", "data", allow_duplicate=True),
     Input("clear-meal", "n_clicks"),
     prevent_initial_call=True,
 )
 def clear_meal(n_clicks):
-    return {} if n_clicks else no_update
+    if not n_clicks:
+        return no_update, no_update
+    return {}, focus_payload("#meal-title")
+
+
+clientside_callback(
+    """
+    function(focusTarget) {
+        if (!focusTarget || !focusTarget.selector) {
+            return window.dash_clientside.no_update;
+        }
+        window.setTimeout(function () {
+            var element = document.querySelector(focusTarget.selector);
+            if (element && typeof element.focus === "function") {
+                element.focus();
+            }
+        }, 80);
+        return focusTarget.selector;
+    }
+    """,
+    Output("focus-result", "children"),
+    Input("focus-target", "data"),
+)
 
 
 if __name__ == "__main__":
