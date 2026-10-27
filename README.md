@@ -1,6 +1,26 @@
 # Budget Protein Planner
 Student meal-planning prototype for comparing nutrition and portion costs.
 
+## Plotly Dash course submission
+
+The required Plotly Dash implementation for Group 104 is stored in
+`QBUS5010_DASHBOARD_GROUP_104/`. It contains `app.py`, `data/foods.json`,
+`requirements.txt` and a separate README with run instructions.
+
+GitHub Pages hosts the original static HTML prototype only and cannot execute a
+Python Dash application. To run the final dashboard locally:
+
+```text
+cd QBUS5010_DASHBOARD_GROUP_104
+python -m pip install -r requirements.txt
+python app.py
+```
+
+Open `http://127.0.0.1:8050`.
+
+The following section describes the original static prototype used during
+development.
+
 ## Open the dashboard
 Visit https://yma201004-gif.github.io/budget-protein-planner/ after GitHub Pages deployment.
 Alternatively download the repository ZIP, extract it, and open index.html. Keep all JavaScript and CSS files together.
